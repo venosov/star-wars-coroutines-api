@@ -10,7 +10,10 @@ class StarWarsApiRoutes(private val starWarsApiHandlers: StarWarsApiHandlers) {
 
     @Bean
     fun starWarsApiRouter() = coRouter {
-        GET("/functionalapi/people/{id}", starWarsApiHandlers::getCharacter)
+        "/functionalapi/people/{id}".nest {
+            GET("", starWarsApiHandlers::getCharacter)
+            GET("/films", starWarsApiHandlers::getCharacterFilms)
+        }
     }
 
 }
