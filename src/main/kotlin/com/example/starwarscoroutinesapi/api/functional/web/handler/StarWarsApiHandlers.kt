@@ -2,7 +2,7 @@ package com.example.starwarscoroutinesapi.api.functional.web.handler
 
 import com.example.starwarscoroutinesapi.client.StarWarsApiWebClient
 import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flatMapMerge
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse.ok
@@ -15,9 +15,9 @@ class StarWarsApiHandlers(private val starWarsApiWebClient: StarWarsApiWebClient
 
     suspend fun getCharacterFilms(serverRequest: ServerRequest) = ok()
             .bodyAndAwait(starWarsApiWebClient.findCharacter(serverRequest.pathVariable("id").toInt())
-                    .flatMapConcat {
+                    .flatMapMerge {
                         it.films.asFlow()
-                    }.flatMapConcat {
+                    }.flatMapMerge {
                         starWarsApiWebClient.findFilm(it)
                     })
 
